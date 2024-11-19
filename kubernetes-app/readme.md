@@ -125,20 +125,6 @@ curl http://$(minikube ip):30000/health
 curl http://$(minikube ip):30000/metrics
 ```
 
-## 📈 Metrics
-
-The application exposes the following metrics:
-
-- **Request Count**: Total number of HTTP requests
-  ```prometheus
-  flask_request_count_total{endpoint="endpoint_name",method="GET"}
-  ```
-
-- **Request Latency**: Request duration in seconds
-  ```prometheus
-  flask_request_latency_seconds{endpoint="endpoint_name"}
-  ```
-
 ## 🧹 Cleanup
 
 To remove all deployed resources:
