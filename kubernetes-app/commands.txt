@@ -1,0 +1,55 @@
+# 1. Start Minikube
+minikube start
+
+# 2. Enable Minikube Docker daemon
+eval $(minikube docker-env)
+
+# 3. Build the Docker image
+docker build -t flask-app:latest .
+
+# 4. Verify the image is built
+docker images | grep flask-app
+
+# 5. Add Helm repositories
+
+Adding prometheus and grafana repositories
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+# 6. Install Prometheus
+helm install prometheus prometheus-community/prometheus -f monitoring/prometheus-values.yaml
+
+# 7. Install Grafana
+helm install grafana grafana/grafana -f monitoring/grafana-values.yaml
+
+# 8. Deploy Flask application
+helm install flask-demo ./mychart
+
+# 9. Wait for all pods to be ready
+kubectl get pods -w
+
+# 10. Get Grafana admin password
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+# 11. Set up port forwarding for Grafana
+kubectl port-forward service/grafana 3000:80 &
+
+# 12. Get the Flask application URL
+echo "Flask app URL: http://$(minikube ip):30000"
+
+# Check if all pods are running
+kubectl get pods
+
+# Test the Flask application
+curl http://$(minikube ip):30000
+
+# Check metrics endpoint
+curl http://$(minikube ip):30000/metrics
+
+# Generate some test traffic
+for i in {1..50}; do
+    curl http://$(minikube ip):30000
+    sleep 0.1
+done

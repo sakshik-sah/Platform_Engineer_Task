@@ -1,0 +1,20 @@
+# mychart/values.yaml
+replicaCount: 2
+
+image:
+  repository: flask-app
+  tag: latest
+  pullPolicy: Never
+
+service:
+  type: NodePort
+  port: 5000
+  nodePort: 30000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

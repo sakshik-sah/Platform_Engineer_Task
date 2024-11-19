@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - AWS_DEFAULT_REGION=ap-south-1
+      - BUCKET_NAME
+      - QUEUE_URL
+      - SECRET_NAME
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    restart: always

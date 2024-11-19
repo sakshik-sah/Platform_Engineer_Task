@@ -1,0 +1,16 @@
+# mychart/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-flask-service
+  labels:
+    app: flask-app
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 5000
+      nodePort: {{ .Values.service.nodePort }}
+  selector:
+    app: flask-app
